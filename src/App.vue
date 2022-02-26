@@ -61,17 +61,16 @@
 </template>
 
 <script>
-import { ref, watchEffect } from 'vue'
-import * as todoStorage from './util/todoStorage'
+import useTodoList from './composition/useTodoList'
+import useNewTodo from './composition/useNewTodo'
+
 export default {
   setup () {
-    // 聚合
-    const todosRef = ref(todoStorage.fetch())
-    window.todosRef = todosRef
-    watchEffect(() => {
-      todoStorage.save(todosRef.value)
-    })
-    return { todosRef }
+    const { todosRef } = useTodoList();
+    return {
+      // todosRef, 页面用不到
+      ...useNewTodo(todosRef)
+    }
   }
 }
 </script>
