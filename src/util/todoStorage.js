@@ -25,3 +25,14 @@ export function fetch() {
 export function save(todos) {
   localStorage.setItem(LOCAL_KEY, JSON.stringify(todos));
 }
+
+export function filter (todos, visible='all') { 
+  if (visible === 'all') {
+    return todos
+  } else if (visible === 'active') {
+    return todos.filter(it => !it.completed)
+  }else if (visible === 'completed') {
+    return todos.filter(it => it.completed)
+  }
+  throw new Error('invalid visible ')
+}
