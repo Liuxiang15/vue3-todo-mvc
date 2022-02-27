@@ -12,7 +12,7 @@
           @keyup.enter="addTodo"
         />
       </header>
-      <section class="main">
+      <section class="main" v-show="todosRef.length > 0">
         <input
           id="toggle-all"
           class="toggle-all"
@@ -34,12 +34,12 @@
             <div class="view">
               <input class="toggle" type="checkbox" v-model="todo.completed" />
               <label @dblclick="editTodo(todo)">{{ todo.title }}</label>
-              <button class="destroy"></button>
+              <button @click="remove(todo)" class="destroy"></button>
             </div>
             <input
               v-model="todo.title"
-              @blur="doneEdit"
-              @keyup.enter="doneEdit"
+              @blur="doneEdit(todo)"
+              @keyup.enter="doneEdit(todo)"
               @keyup.escape="cancelEdit(todo)"
               class="edit"
               type="text"
@@ -47,7 +47,7 @@
           </li>
         </ul>
       </section>
-      <footer class="footer">
+      <footer class="footer" v-show="todosRef.length > 0">
         <span class="todo-count">
           <strong>{{ remainingTodosRef }}</strong>
           <span>item{{ remainingTodosRef === 1 ? '' : 's' }} left</span>
@@ -69,7 +69,11 @@
             >
           </li>
         </ul>
-        <button class="clear-completed" v-show="completedRef > 0">
+        <button
+          @click="removeCompleted"
+          class="clear-completed"
+          v-show="completedRef > 0"
+        >
           Clear completed
         </button>
       </footer>
@@ -82,16 +86,19 @@ import useTodoList from './composition/useTodoList'
 import useNewTodo from './composition/useNewTodo'
 import useFilter from './composition/useFilter'
 import useEditTodo from './composition/useEditTodo'
+import useRemoveTodo from './composition/useRemoveTodo'
+
 
 
 export default {
   setup () {
     const { todosRef } = useTodoList();
     return {
-      // todosRef, 页面用不到
+      todosRef,
       ...useNewTodo(todosRef),
       ...useFilter(todosRef),
-      ...useEditTodo(todosRef)
+      ...useEditTodo(todosRef),
+      ...useRemoveTodo(todosRef)
     }
   }
 }

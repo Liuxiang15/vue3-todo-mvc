@@ -11,9 +11,17 @@ export default function useEditTodo (todosRef) {
     }
     
     // 完成修改
-    const doneEdit = () => { 
+    const doneEdit = (todo) => { 
         console.log('完成修改')
         editingTodoRef.value = null
+        // 去除首尾空白
+        const title = todo.title.trim()
+        if (title) {
+            todo.title = title
+        } else {
+            todosRef.value.splice(todosRef.value.indexOf(todo), 1)
+        }
+        
     }
 
     const cancelEdit = (todo) => { 
